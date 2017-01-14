@@ -40,6 +40,11 @@ public class SolutionsTest {
         assertThat(room.isSolutionCorrect(s)).isTrue();
 
         s = new Solution();
+        s.addSolution(new SolutionItem(1,2,A));
+        s.addSolution(new SolutionItem(1,3,B));
+        assertThat(room.isSolutionCorrect(s)).isFalse();
+
+        s = new Solution();
         s.addSolution(new SolutionItem(2,1,A));
         s.addSolution(new SolutionItem(2,3,B));
         assertThat(room.isSolutionCorrect(s)).isTrue();

@@ -108,4 +108,77 @@ public class SolverTest {
 
         assertThat(correctSolutions).isEqualTo(all);
     }
+
+    @Test
+    public void correctSolutionsAll() throws IOException {
+        room.loadData("2,2" + System.lineSeparator() + "##" + System.lineSeparator() + "##");
+        furniture.loadData("A1#"+System.lineSeparator()+"B1#");
+        FurnitureItem A = this.furniture.getFurnitureItems().get(0);
+        FurnitureItem B = this.furniture.getFurnitureItems().get(1);
+        Solver solver = new Solver(room, furniture);
+        solver.start();
+        List<Solution> correctSolutions = solver.getCorrectSolutions();
+        assertThat(correctSolutions.size()).isEqualTo(4*3);
+
+        Solution inCorrect1 = new Solution();
+        inCorrect1.addSolution(new SolutionItem(0, 0, A));
+        inCorrect1.addSolution(new SolutionItem(0, 0, B));
+        assertThat(correctSolutions).doesNotContain(inCorrect1);
+
+        Solution correct1 = new Solution();
+        correct1.addSolution(new SolutionItem(0, 0, A));
+        correct1.addSolution(new SolutionItem(0, 1, B));
+        assertThat(correctSolutions).contains(correct1);
+
+        Solution correct2 = new Solution();
+        correct2.addSolution(new SolutionItem(0, 1, A));
+        correct2.addSolution(new SolutionItem(0, 0, B));
+        assertThat(correctSolutions).contains(correct2);
+
+        Solution correct3 = new Solution();
+        correct3.addSolution(new SolutionItem(1, 1, A));
+        correct3.addSolution(new SolutionItem(0, 0, B));
+        assertThat(correctSolutions).contains(correct3);
+    }
+
+    @Test
+    public void correctSolutions2() throws IOException {
+        room.loadData(new File("files/room.txt"));
+        furniture.loadData(new File("files/furniture.txt"));
+        FurnitureItem A = this.furniture.getFurnitureItems().get(0);
+        FurnitureItem B = this.furniture.getFurnitureItems().get(1);
+
+        Solver solver = new Solver(room, furniture);
+        solver.start();
+        List<Solution> correctSolutions = solver.getCorrectSolutions();
+        assertThat(correctSolutions.size()).isNotZero();
+
+        Solution correct1 = new Solution();
+        correct1.addSolution(new SolutionItem(2, 0, A));
+        correct1.addSolution(new SolutionItem(2, 2, B));
+
+        assertThat(correctSolutions).contains(correct1);
+
+        Solution correct2 = new Solution();
+        correct2.addSolution(new SolutionItem(3, 3, A));
+        correct2.addSolution(new SolutionItem(1, 1, B));
+
+        assertThat(correctSolutions).contains(correct2);
+
+        Solution inCorrect = new Solution();
+        inCorrect.addSolution(new SolutionItem(0, 3, A));
+        inCorrect.addSolution(new SolutionItem(2, 1, B));
+        assertThat(correctSolutions).doesNotContain(inCorrect);
+
+        Solution inCorrect2 = new Solution();
+        inCorrect2.addSolution(new SolutionItem(1, 0, A));
+        inCorrect2.addSolution(new SolutionItem(2, 2, B));
+        assertThat(correctSolutions).doesNotContain(inCorrect2);
+
+        Solution inCorrect3 = new Solution();
+        inCorrect3.addSolution(new SolutionItem(3, 5, A));
+        inCorrect3.addSolution(new SolutionItem(0, 4, B));
+        assertThat(correctSolutions).doesNotContain(inCorrect3);
+
+    }
 }
