@@ -20,42 +20,42 @@ public class Application {
         String firstArg;
         String secondArg;
 
-        if(args.length != 2){
-            System.err.println("U must provide exactly 2 arguments");
-            System.err.println("First is room map (String or .txt file path)");
-            System.err.println("Second is furniture list (String or .txt file path)");
+        if (args.length != 2) {
+            String error = "U must provide exactly 2 arguments"+System.lineSeparator();
+            error += "First is room map (.txt file path)"+System.lineSeparator();
+            error += "Second is furniture list ( .txt file path)";
+            throw new IllegalArgumentException(error);
         }
 
         firstArg = args[0];
         secondArg = args[1];
 
-        if(firstArg.length() < 1){
-            System.err.println("Room map cannot be empty");
+        if (firstArg.length() < 1) {
+            throw new IllegalArgumentException("Room map cannot be empty");
         }
-        if(secondArg.length() < 1){
-            System.err.println("Furniture list cannot be empty");
+        if (secondArg.length() < 1) {
+            throw new IllegalArgumentException("Furniture list cannot be empty");
         }
 
         Room room = new Room();
         Furniture furniture = new Furniture();
-
-        if(firstArg.contains(".txt")){
-            room.loadData(new File(firstArg));
-        }else {
-            room.loadData(firstArg);
+        File roomFile = new File(firstArg);
+        File furnitureFile = new File(secondArg);
+        if (!roomFile.exists()) {
+            throw new IOException("Room file on path " + firstArg + " not exists");
+        }
+        if (!furnitureFile.exists()) {
+            throw new IOException("Furniture file on path " + secondArg + " not exists");
         }
 
-        if(secondArg.contains(".txt")){
-            furniture.loadData(new File(secondArg));
-        }else {
-            furniture.loadData(secondArg);
-        }
+        room.loadData(roomFile);
+        furniture.loadData(furnitureFile);
 
         Solver solver = new Solver(room, furniture);
 
         List<Solution> solutions = solver.start();
 
-        for(Solution s: solutions){
+        for (Solution s : solutions) {
             System.out.println(s);
         }
     }

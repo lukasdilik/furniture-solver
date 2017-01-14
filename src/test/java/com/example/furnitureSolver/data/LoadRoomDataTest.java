@@ -96,7 +96,7 @@ public class LoadRoomDataTest {
     @Test
     public void loadMapFromString() {
         try {
-            String map = ".#" + System.lineSeparator() + "##";
+            String map = ".#" + "\r\n" + "##";
             room.loadData("2,2" + System.lineSeparator() + map);
             assertThat(room.getHeight()).isEqualTo(2);
             assertThat(room.getWidth()).isEqualTo(2);
